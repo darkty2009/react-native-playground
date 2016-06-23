@@ -6,48 +6,49 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
+    Navigator
 } from 'react-native';
 
-class reactnativeplayground extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
-  }
+import IndexContent from './scripts/Index.js';
+import RunnerContent from './scripts/Runner.js';
+
+class Playground extends Component {
+    componentDidMount() {
+
+    }
+
+    configureScene(route) {
+        return Object.assign({
+            gestures:{}
+        }, Navigator.SceneConfigs.FloatFromRight);
+    }
+
+    renderScene(route, navigator) {
+        var Page = null;
+        if(route.name == 'index') {
+            Page = IndexContent;
+        }else {
+            Page = RunnerContent;
+        }
+
+        return <Page {...route} route={route} navigator={navigator} />;
+    }
+
+    render() {
+        return (
+            <View style={{flex:1}}>
+                <Navigator
+                    initialRoute={{name: 'index'}}
+                    configureScene={this.configureScene}
+                    renderScene={this.renderScene.bind(this)}
+                />
+            </View>
+        );
+    }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
-
-AppRegistry.registerComponent('reactnativeplayground', () => reactnativeplayground);
+AppRegistry.registerComponent('reactnativeplayground', () => Playground);
